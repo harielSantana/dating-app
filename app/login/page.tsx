@@ -32,7 +32,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Login</CardTitle>
-          <CardDescription className="text-center">Enter your credentials to access your account</CardDescription>
+            <CardDescription className="text-center">Digite suas credenciais para acessar sua conta</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin}>

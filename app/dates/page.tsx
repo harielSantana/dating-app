@@ -133,7 +133,7 @@ export default function DatesPage() {
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">Date Selector</h1>
+        <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">Vamos sortear um encontro!</h1>
         <Button asChild variant="outline">
           <Link href="/login">Logout</Link>
         </Button>
@@ -141,16 +141,16 @@ export default function DatesPage() {
 
       <Tabs defaultValue="select">
         <TabsList className="grid w-full grid-cols-2 mb-8">
-          <TabsTrigger value="select">Select a Date</TabsTrigger>
-          <TabsTrigger value="history">View History</TabsTrigger>
+          <TabsTrigger value="select">Selecione a data</TabsTrigger>
+          <TabsTrigger value="history">Ver Historico</TabsTrigger>
         </TabsList>
 
         <TabsContent value="select">
           <div className="grid grid-cols-1 gap-6">
             <Card className="text-center">
               <CardHeader>
-                <CardTitle>Random Date Selector</CardTitle>
-                <CardDescription>Click the button to randomly select a date for next week</CardDescription>
+                <CardTitle>Sorteador de Encontros</CardTitle>
+                <CardDescription>Clique aqui para sortear um encontro que temos dentro da base de dados</CardDescription>
               </CardHeader>
               <CardContent className="space-y-8">
                 <div
@@ -164,7 +164,7 @@ export default function DatesPage() {
                       )}
                     </div>
                   ) : (
-                    <p className="text-xl text-gray-500 dark:text-gray-400">Click the button to select a date</p>
+                    <p className="text-xl text-gray-500 dark:text-gray-400">Clique no botao para selecionar a data</p>
                   )}
                 </div>
 

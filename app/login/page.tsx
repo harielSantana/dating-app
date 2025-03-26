@@ -18,9 +18,9 @@ export default function LoginPage() {
     e.preventDefault()
 
     // Simple authentication logic - in a real app, use a proper auth system
-    if (username === "admin" && password === "admin") {
+    if (username === "admin" && password === "hari123") {
       router.push("/admin")
-    } else if (username === "partner" && password === "partner") {
+    } else if (username === "hay" && password === "hay123") {
       router.push("/dates")
     } else {
       alert("Invalid credentials")
@@ -64,13 +64,13 @@ export default function LoginPage() {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-center">
+        {/* <CardFooter className="flex justify-center">
           <div className="text-sm text-muted-foreground">
             <p>Demo credentials:</p>
             <p>Admin: admin/admin</p>
             <p>Partner: partner/partner</p>
           </div>
-        </CardFooter>
+        </CardFooter> */}
       </Card>
     </div>
   )

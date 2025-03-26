@@ -1,84 +1,109 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useToast } from "@/hooks/use-toast"
-import Link from "next/link"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 // Types
 interface DateOption {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 interface DateSelection {
-  id: string
-  dateId: string
-  dateName: string
-  week: string
-  selectedAt: string
+  id: string;
+  dateId: string;
+  dateName: string;
+  week: string;
+  selectedAt: string;
 }
 
 interface ChartData {
-  name: string
-  count: number
+  name: string;
+  count: number;
 }
 
 export default function DatesPage() {
-  const { toast } = useToast()
-  const [dateOptions, setDateOptions] = useState<DateOption[]>([])
-  const [dateSelections, setDateSelections] = useState<DateSelection[]>([])
-  const [selectedDate, setSelectedDate] = useState<DateOption | null>(null)
-  const [isSpinning, setIsSpinning] = useState(false)
-  const [chartData, setChartData] = useState<ChartData[]>([])
+  const { toast } = useToast();
+  const [dateOptions, setDateOptions] = useState<DateOption[]>([]);
+  const [dateSelections, setDateSelections] = useState<DateSelection[]>([]);
+  const [selectedDate, setSelectedDate] = useState<DateOption | null>(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
 
   // Load data from localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const savedOptions = localStorage.getItem("dateOptions")
-      const savedSelections = localStorage.getItem("dateSelections")
+      const savedOptions = localStorage.getItem("dateOptions");
+      const savedSelections = localStorage.getItem("dateSelections");
 
       if (savedOptions) {
-        setDateOptions(JSON.parse(savedOptions))
+        setDateOptions(JSON.parse(savedOptions));
       }
 
       if (savedSelections) {
-        setDateSelections(JSON.parse(savedSelections))
+        setDateSelections(JSON.parse(savedSelections));
       }
     }
-  }, [])
+  }, []);
 
   // Prepare chart data
   useEffect(() => {
-    const dateCounts: Record<string, number> = {}
+    const dateCounts: Record<string, number> = {};
 
     dateSelections.forEach((selection) => {
       if (dateCounts[selection.dateName]) {
-        dateCounts[selection.dateName]++
+        dateCounts[selection.dateName]++;
       } else {
-        dateCounts[selection.dateName] = 1
+        dateCounts[selection.dateName] = 1;
       }
-    })
+    });
 
     const data = Object.keys(dateCounts).map((name) => ({
       name,
       count: dateCounts[name],
-    }))
+    }));
 
-    setChartData(data)
-  }, [dateSelections])
+    setChartData(data);
+  }, [dateSelections]);
 
   const getWeekNumber = () => {
-    const now = new Date()
-    const onejan = new Date(now.getFullYear(), 0, 1)
-    const weekNum = Math.ceil(((now.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7)
-    return `Week ${weekNum}, ${now.getFullYear()}`
-  }
+    const now = new Date();
+    const onejan = new Date(now.getFullYear(), 0, 1);
+    const weekNum = Math.ceil(
+      ((now.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
+    );
+    return `Week ${weekNum}, ${now.getFullYear()}`;
+  };
 
   const handleRandomSelect = () => {
     if (dateOptions.length === 0) {
@@ -86,27 +111,28 @@ export default function DatesPage() {
         title: "Error",
         description: "No date options available",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    setIsSpinning(true)
+    setIsSpinning(true);
 
     // Simulate spinning animation
-    let counter = 0
-    const totalSpins = 20
+    let counter = 0;
+    const totalSpins = 20;
     const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * dateOptions.length)
-      setSelectedDate(dateOptions[randomIndex])
+      const randomIndex = Math.floor(Math.random() * dateOptions.length);
+      setSelectedDate(dateOptions[randomIndex]);
 
-      counter++
+      counter++;
       if (counter >= totalSpins) {
-        clearInterval(interval)
-        setIsSpinning(false)
+        clearInterval(interval);
+        setIsSpinning(false);
 
         // Save the final selection
-        const finalSelection = dateOptions[Math.floor(Math.random() * dateOptions.length)]
-        setSelectedDate(finalSelection)
+        const finalSelection =
+          dateOptions[Math.floor(Math.random() * dateOptions.length)];
+        setSelectedDate(finalSelection);
 
         const newSelection: DateSelection = {
           id: Date.now().toString(),
@@ -114,26 +140,31 @@ export default function DatesPage() {
           dateName: finalSelection.name,
           week: getWeekNumber(),
           selectedAt: new Date().toISOString(),
-        }
+        };
 
-        const updatedSelections = [...dateSelections, newSelection]
-        setDateSelections(updatedSelections)
+        const updatedSelections = [...dateSelections, newSelection];
+        setDateSelections(updatedSelections);
 
         // Save to localStorage
-        localStorage.setItem("dateSelections", JSON.stringify(updatedSelections))
+        localStorage.setItem(
+          "dateSelections",
+          JSON.stringify(updatedSelections)
+        );
 
         toast({
           title: "Date Selected!",
           description: `You'll be going on: ${finalSelection.name}`,
-        })
+        });
       }
-    }, 100)
-  }
+    }, 100);
+  };
 
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">Vamos sortear um encontro!</h1>
+        <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">
+          Vamos sortear um encontro!
+        </h1>
         <Button asChild variant="outline">
           <Link href="/login">Logout</Link>
         </Button>
@@ -150,21 +181,32 @@ export default function DatesPage() {
             <Card className="text-center">
               <CardHeader>
                 <CardTitle>Sorteador de Encontros</CardTitle>
-                <CardDescription>Clique aqui para sortear um encontro que temos dentro da base de dados</CardDescription>
+                <CardDescription>
+                  Clique aqui para sortear um encontro que temos dentro da base
+                  de dados
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8">
                 <div
-                  className={`transition-all duration-300 p-8 rounded-lg bg-rose-50 dark:bg-gray-800 ${isSpinning ? "animate-pulse" : ""}`}
+                  className={`transition-all duration-300 p-8 rounded-lg bg-rose-50 dark:bg-gray-800 ${
+                    isSpinning ? "animate-pulse" : ""
+                  }`}
                 >
                   {selectedDate ? (
                     <div className="space-y-2">
-                      <h3 className="text-2xl font-bold text-rose-600 dark:text-rose-400">{selectedDate.name}</h3>
+                      <h3 className="text-2xl font-bold text-rose-600 dark:text-rose-400">
+                        {selectedDate.name}
+                      </h3>
                       {selectedDate.description && (
-                        <p className="text-gray-600 dark:text-gray-300">{selectedDate.description}</p>
+                        <p className="text-gray-600 dark:text-gray-300">
+                          {selectedDate.description}
+                        </p>
                       )}
                     </div>
                   ) : (
-                    <p className="text-xl text-gray-500 dark:text-gray-400">Clique no botao para selecionar a data</p>
+                    <p className="text-xl text-gray-500 dark:text-gray-400">
+                      Clique no botao para selecionar a data
+                    </p>
                   )}
                 </div>
 
@@ -192,27 +234,37 @@ export default function DatesPage() {
           <div className="grid grid-cols-1 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Your Date History</CardTitle>
-                <CardDescription>View all your previously selected dates</CardDescription>
+                <CardTitle>Seu Histórico de Encontros</CardTitle>
+                <CardDescription>
+                  Veja todos os seus encontros selecionados anteriormente
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 {dateSelections.length === 0 ? (
-                  <div className="text-center py-6 text-muted-foreground">You haven't selected any dates yet.</div>
+                  <div className="text-center py-6 text-muted-foreground">
+                    Você ainda não selecionou nenhum encontro.
+                  </div>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Date Name</TableHead>
-                        <TableHead>Week</TableHead>
-                        <TableHead>Selected On</TableHead>
+                        <TableHead>Nome do Encontro</TableHead>
+                        <TableHead>Semana</TableHead>
+                        <TableHead>Selecionado Em</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {dateSelections.map((selection) => (
                         <TableRow key={selection.id}>
-                          <TableCell className="font-medium">{selection.dateName}</TableCell>
+                          <TableCell className="font-medium">
+                            {selection.dateName}
+                          </TableCell>
                           <TableCell>{selection.week}</TableCell>
-                          <TableCell>{new Date(selection.selectedAt).toLocaleDateString()}</TableCell>
+                          <TableCell>
+                            {new Date(
+                              selection.selectedAt
+                            ).toLocaleDateString()}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -224,8 +276,10 @@ export default function DatesPage() {
             {dateSelections.length > 0 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Date Selection Statistics</CardTitle>
-                  <CardDescription>Visualization of your date selections</CardDescription>
+                  <CardTitle>Estatísticas de Seleção de Datas</CardTitle>
+                  <CardDescription>
+                    Visualização das suas seleções de datas
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="h-80 w-full">
@@ -240,11 +294,20 @@ export default function DatesPage() {
                         }}
                       >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" angle={-45} textAnchor="end" height={70} />
+                        <XAxis
+                          dataKey="name"
+                          angle={-45}
+                          textAnchor="end"
+                          height={70}
+                        />
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="count" name="Times Selected" fill="#f43f5e" />
+                        <Bar
+                          dataKey="count"
+                          name="Times Selected"
+                          fill="#f43f5e"
+                        />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
@@ -255,6 +318,5 @@ export default function DatesPage() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }
-

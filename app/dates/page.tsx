@@ -166,7 +166,7 @@ export default function DatesPage() {
           Vamos sortear um encontro!
         </h1>
         <Button asChild variant="outline">
-          <Link href="/login">Logout</Link>
+          <Link href="/login">Sair</Link>
         </Button>
       </div>
 

@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,7 +29,6 @@ interface DateSelection {
 export default function AdminPage() {
   const { toast } = useToast()
   const [dateOptions, setDateOptions] = useState<DateOption[]>(() => {
-    // Load from localStorage if available
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dateOptions")
       return saved ? JSON.parse(saved) : []
@@ -39,7 +37,6 @@ export default function AdminPage() {
   })
 
   const [dateSelections, setDateSelections] = useState<DateSelection[]>(() => {
-    // Load from localStorage if available
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dateSelections")
       return saved ? JSON.parse(saved) : []
@@ -52,7 +49,6 @@ export default function AdminPage() {
     description: "",
   })
 
-  // Save to localStorage whenever state changes
   useEffect(() => {
     localStorage.setItem("dateOptions", JSON.stringify(dateOptions))
   }, [dateOptions])
@@ -66,8 +62,8 @@ export default function AdminPage() {
 
     if (!newDate.name.trim()) {
       toast({
-        title: "Error",
-        description: "Date name is required",
+        title: "Erro",
+        description: "O nome do date é obrigatório",
         variant: "destructive",
       })
       return
@@ -83,17 +79,19 @@ export default function AdminPage() {
     setNewDate({ name: "", description: "" })
 
     toast({
-      title: "Success",
-      description: "Date option added successfully",
+      title: "Sucesso",
+      description: `A opção "${dateOption.name}" foi adicionada com sucesso! 🎉`,
     })
   }
 
   const handleDeleteDate = (id: string) => {
+    const deletedDate = dateOptions.find((date) => date.id === id)
     setDateOptions(dateOptions.filter((date) => date.id !== id))
 
     toast({
-      title: "Success",
-      description: "Date option deleted successfully",
+      title: "Removido",
+      description: `A opção "${deletedDate?.name}" foi excluída.`,
+      variant: "destructive",
     })
   }
 
@@ -102,13 +100,13 @@ export default function AdminPage() {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">Dashboard de Encontros com a gatinha! </h1>
         <Button asChild variant="outline">
-          <Link href="/login">Logout</Link>
+          <Link href="/login">Sair</Link>
         </Button>
       </div>
 
       <Tabs defaultValue="dates">
         <TabsList className="grid w-full grid-cols-2 mb-8">
-          <TabsTrigger value="dates">Admininstrar Opções</TabsTrigger>
+          <TabsTrigger value="dates">Administrar Opções</TabsTrigger>
           <TabsTrigger value="history">Visualizar Histórico</TabsTrigger>
         </TabsList>
 
@@ -116,32 +114,32 @@ export default function AdminPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="md:col-span-1">
               <CardHeader>
-                <CardTitle>Adicionar nova opção de date</CardTitle>
+                <CardTitle>Adicionar novo Encontro</CardTitle>
                 <CardDescription>Criar nova opção de encontro para sua parceira sortear</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleAddDate} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Date Name</Label>
+                    <Label htmlFor="name">Nome do Date</Label>
                     <Input
                       id="name"
-                      placeholder="Dinner at favorite restaurant"
+                      placeholder="Jantar em um restaurante"
                       value={newDate.name}
                       onChange={(e) => setNewDate({ ...newDate, name: e.target.value })}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="description">Description (Optional)</Label>
+                    <Label htmlFor="description">Descrição (Opcional)</Label>
                     <Input
                       id="description"
-                      placeholder="Details about the date"
+                      placeholder="Detalhes sobre o date"
                       value={newDate.description}
                       onChange={(e) => setNewDate({ ...newDate, description: e.target.value })}
                     />
                   </div>
                   <Button type="submit" className="w-full bg-rose-500 hover:bg-rose-600">
-                    Add Date Option
+                    Adicionar Date
                   </Button>
                 </form>
               </CardContent>
@@ -149,21 +147,21 @@ export default function AdminPage() {
 
             <Card className="md:col-span-2">
               <CardHeader>
-                <CardTitle>Current Date Options</CardTitle>
-                <CardDescription>Manage your existing date options</CardDescription>
+                <CardTitle>Opções de Encontro</CardTitle>
+                <CardDescription>Gerencie suas opções de encontros</CardDescription>
               </CardHeader>
               <CardContent>
                 {dateOptions.length === 0 ? (
                   <div className="text-center py-6 text-muted-foreground">
-                    No date options added yet. Add your first date option!
+                    Nenhuma opção de date adicionada ainda. Adicione seu primeiro encontro!
                   </div>
                 ) : (
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Descrição</TableHead>
+                        <TableHead className="text-right">Ações</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -173,7 +171,7 @@ export default function AdminPage() {
                           <TableCell>{date.description || "—"}</TableCell>
                           <TableCell className="text-right">
                             <Button variant="destructive" size="sm" onClick={() => handleDeleteDate(date.id)}>
-                              Delete
+                              Remover
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -189,19 +187,19 @@ export default function AdminPage() {
         <TabsContent value="history">
           <Card>
             <CardHeader>
-              <CardTitle>Date Selection History</CardTitle>
-              <CardDescription>View all dates selected by your partner</CardDescription>
+              <CardTitle>Histórico de Encontros</CardTitle>
+              <CardDescription>Veja todos os encontros que sua parceira já sorteou</CardDescription>
             </CardHeader>
             <CardContent>
               {dateSelections.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">No dates have been selected yet.</div>
+                <div className="text-center py-6 text-muted-foreground">Nenhum encontro foi sorteado ainda.</div>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Date Name</TableHead>
-                      <TableHead>Week</TableHead>
-                      <TableHead>Selected On</TableHead>
+                      <TableHead>Nome do Encontro</TableHead>
+                      <TableHead>Semana</TableHead>
+                      <TableHead>Selecionado em</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -222,4 +220,3 @@ export default function AdminPage() {
     </div>
   )
 }
-

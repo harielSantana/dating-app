@@ -7,8 +7,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Planejador de Dates",
-  description: "Planeje e acompanhe suas datas especiais",
+  title: "Roleta de encontrinhos!",
+  description: "Vamos escolher um date ?",
   generator: 'hariel.dev'
 }
 

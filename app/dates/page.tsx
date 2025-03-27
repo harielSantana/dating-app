@@ -109,7 +109,7 @@ export default function DatesPage() {
     if (dateOptions.length === 0) {
       toast({
         title: "Error",
-        description: "No date options available",
+        description: "Sem opções de data disponíveis. Adicione algumas!",
         variant: "destructive",
       });
       return;
@@ -163,7 +163,7 @@ export default function DatesPage() {
     <div className="container mx-auto p-4 max-w-6xl">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-rose-600 dark:text-rose-400">
-          Vamos sortear um encontro!
+          Onde vamos hoje, be?!
         </h1>
         <Button asChild variant="outline">
           <Link href="/login">Sair</Link>
@@ -182,8 +182,7 @@ export default function DatesPage() {
               <CardHeader>
                 <CardTitle>Sorteador de Encontros</CardTitle>
                 <CardDescription>
-                  Clique aqui para sortear um encontro que temos dentro da base
-                  de dados
+                  Clique aqui para sortear um encontro que vamos fazer :)
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8">
@@ -216,14 +215,14 @@ export default function DatesPage() {
                   className="bg-rose-500 hover:bg-rose-600 text-white px-8 py-6 text-xl"
                   size="lg"
                 >
-                  {isSpinning ? "Selecting..." : "Select Random Date"}
+                  {isSpinning ? "Selecionando... " : "Oque iremos fazer hoje?"}
                 </Button>
               </CardContent>
               <CardFooter className="justify-center">
                 <p className="text-sm text-muted-foreground">
                   {dateOptions.length === 0
-                    ? "No date options available. Ask your partner to add some!"
-                    : `${dateOptions.length} date options available`}
+                    ? "Sem opcoes disponiveis. Pergunte ao seu parceiro(eu) para adicionar algumas!"
+                    : `${dateOptions.length} opcoes disponiveis`}
                 </p>
               </CardFooter>
             </Card>
